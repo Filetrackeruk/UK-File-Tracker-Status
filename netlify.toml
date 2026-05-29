@@ -1,0 +1,23 @@
+# netlify.toml — Team File Tracker
+# ─────────────────────────────────────────────────────────────────────────────
+
+[build]
+  publish = "."               # HTML file is in the repo root
+  functions = "netlify/functions"
+
+# ── Companies House OAuth function ───────────────────────────────────────────
+# GET /api/ch-lookup?company=XXXXXXXX  →  netlify/functions/ch-lookup.js
+[[redirects]]
+  from   = "/api/ch-lookup"
+  to     = "/.netlify/functions/ch-lookup"
+  status = 200
+
+# ── Legacy REST API proxy (kept for manual API key override) ─────────────────
+# Used only if a legacy key is saved in Settings.
+[[redirects]]
+  from   = "/_ch_proxy/*"
+  to     = "https://api.company-information.service.gov.uk/:splat"
+  status = 200
+  force  = true
+  [redirects.headers]
+    X-Forwarded-For = ""
